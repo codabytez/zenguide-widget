@@ -4,6 +4,7 @@ import {
   analyticsTracker,
   TourCompletedOverlay,
   TourProvider,
+  TourRestartButton,
   TourWidget,
 } from "./widget-exports";
 
@@ -22,6 +23,7 @@ function App() {
 
       <TourWidget position="bottom-right" />
       <TourCompletedOverlay />
+      <TourRestartButton />
     </TourProvider>
   );
 }

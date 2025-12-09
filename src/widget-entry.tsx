@@ -7,6 +7,7 @@ import {
   TourWidget,
   TourCompletedOverlay,
   analyticsTracker,
+  TourRestartButton,
 } from "./widget-exports";
 
 // Expose the widget to the window object
@@ -30,6 +31,8 @@ interface WidgetConfig {
   autoStart?: boolean;
   theme?: "light" | "dark";
   position?: "bottom-right" | "bottom-left" | "center";
+  showAvatar?: boolean;
+  avatarPosition?: "left" | "right";
   convexUrl?: string;
 }
 
@@ -39,34 +42,35 @@ interface WidgetAPI {
   destroy: () => void;
 }
 
-// Widget App Component
-const WidgetApp: React.FC<{ config: WidgetConfig; onStart: () => void }> = ({
-  config,
-  onStart,
-}) => {
-  React.useEffect(() => {
-    if (config.autoStart) {
-      onStart();
-    }
-  }, [config.autoStart, onStart]);
-
+// Widget App Component - FIXED VERSION
+const WidgetApp: React.FC<{ config: WidgetConfig }> = ({ config }) => {
   return (
-    <TourProvider tourId={config.tourId}>
+    <TourProvider
+      tourId={config.tourId}
+      config={{
+        theme: config.theme || "dark",
+        showAvatar: config.showAvatar,
+        avatarPosition: config.avatarPosition,
+      }}
+    >
       <TourWidget position={config.position || "bottom-right"} />
       <TourCompletedOverlay />
+      <TourRestartButton />
     </TourProvider>
   );
 };
 
-// Mount function
+// Mount function - FIXED VERSION
 function mount(container: HTMLElement, config: WidgetConfig): WidgetAPI {
   let root: ReactDOM.Root | null = null;
-  let tourKey = 0;
+  let hasStarted = false;
 
   const start = () => {
+    if (hasStarted) return; // Prevent multiple starts
+    hasStarted = true;
+
     analyticsTracker.reset();
     analyticsTracker.track({ type: "tour_started" });
-    tourKey++;
     render();
   };
 
@@ -76,6 +80,7 @@ function mount(container: HTMLElement, config: WidgetConfig): WidgetAPI {
       root.unmount();
       root = null;
     }
+    hasStarted = false;
   };
 
   const destroy = () => {
@@ -89,14 +94,14 @@ function mount(container: HTMLElement, config: WidgetConfig): WidgetAPI {
     }
     root.render(
       <React.StrictMode>
-        <WidgetApp key={tourKey} config={config} onStart={start} />
+        <WidgetApp config={config} />
       </React.StrictMode>
     );
   };
 
   // Initial render if autoStart is true
   if (config.autoStart) {
-    render();
+    start();
   }
 
   return { start, stop, destroy };
@@ -105,7 +110,7 @@ function mount(container: HTMLElement, config: WidgetConfig): WidgetAPI {
 // Expose to window
 window.TourGuideWidget = { mount };
 
-// Auto-initialize if script has data attributes
+// Auto-initialize - FIXED VERSION
 const currentScript = document.currentScript as HTMLScriptElement;
 if (currentScript) {
   const tourId = currentScript.getAttribute("data-tour-id");
@@ -115,30 +120,47 @@ if (currentScript) {
     | "bottom-left"
     | "center"
     | null;
+  const theme = currentScript.getAttribute("data-theme") as
+    | "light"
+    | "dark"
+    | null;
+  const showAvatar = currentScript.getAttribute("data-show-avatar") !== "false";
+  const avatarPosition = currentScript.getAttribute("data-avatar-position") as
+    | "left"
+    | "right"
+    | null;
 
   if (tourId) {
-    // Create container
-    const container = document.createElement("div");
-    container.id = "tourguide-widget-root";
-    document.body.appendChild(container);
+    // Create container only once
+    let container = document.getElementById("tourguide-widget-root");
+    if (!container) {
+      container = document.createElement("div");
+      container.id = "tourguide-widget-root";
+      document.body.appendChild(container);
+    }
 
-    // Mount widget
+    // Mount widget once
     const widget = mount(container, {
       tourId,
       autoStart,
       position: position || "bottom-right",
+      theme: theme || "dark",
+      showAvatar,
+      avatarPosition: avatarPosition || "left",
     });
 
-    // Store reference for manual control
+    // Store reference
     window.TourGuide = window.TourGuide || {};
     window.TourGuide._app = widget;
     window.TourGuide.config = {
       tourId,
       autoStart,
       position: position || "bottom-right",
+      theme: theme || "dark",
+      showAvatar,
+      avatarPosition: avatarPosition || "left",
     };
 
-    // Expose control methods
     window.TourGuide.start = () => widget.start();
     window.TourGuide.stop = () => widget.stop();
   }
