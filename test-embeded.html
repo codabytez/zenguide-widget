@@ -5,11 +5,30 @@
     <title>Tour Widget Embed Test</title>
   </head>
   <body>
+    <button id="start-tour-btn">Start Tour</button>
     <h1>Test Tour Widget Embed</h1>
+
     <script
       src="https://timely-swan-1a2b58.netlify.app/widget-bundle.js"
       data-tour-id="kh7dw5smxjrbw7epxskr37xzd97wy72e"
-      data-auto-start="true"
+      data-auto-start="false"
+      data-position="bottom-left"
+      data-theme="light"
+      data-show-avatar="true"
+      data-avatar-position="center"
     ></script>
+
+    <script>
+      // Wait for widget to load
+      document
+        .getElementById("start-tour-btn")
+        .addEventListener("click", function () {
+          if (window.TourGuide && window.TourGuide.start) {
+            window.TourGuide.start();
+          } else {
+            console.error("TourGuide not loaded yet");
+          }
+        });
+    </script>
   </body>
 </html>

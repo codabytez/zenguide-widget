@@ -6,7 +6,7 @@ import { defaultTourSteps } from "../data/default-tour";
 import { TourContext } from "./context";
 
 // Convex client setup
-const CONVEX_URL = import.meta.env.VITE_CONVEX_URL;
+const CONVEX_URL = "https://little-pelican-550.convex.cloud";
 
 interface TourProviderProps {
   children: React.ReactNode;
@@ -19,6 +19,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   config: userConfig,
   tourId: convexTourId,
 }) => {
+  const lastTrackedStepRef = React.useRef<string | null>(null);
   interface TourData {
     name?: string;
     steps: TourStep[];
@@ -30,13 +31,14 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 
   // Fetch tour data from Convex if tourId is provided
   useEffect(() => {
-    console.log("Convex Tour ID:", convexTourId);
+    console.log("Fetch effect running. Convex Tour ID:", convexTourId);
     if (!convexTourId) {
       setIsLoadingTour(false);
       return;
     }
 
     const fetchTour = async () => {
+      console.log("Fetching tour from Convex...");
       try {
         const response = await fetch(`${CONVEX_URL}/api/query`, {
           method: "POST",
@@ -143,16 +145,27 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   const progress = ((state.currentStepIndex + 1) / config.steps.length) * 100;
 
   // Save state on changes
+  const stateRef = React.useRef(state);
   useEffect(() => {
-    tourStorage.saveState(config.tourId, state);
+    const stateChanged =
+      JSON.stringify(stateRef.current) !== JSON.stringify(state);
+    if (stateChanged) {
+      stateRef.current = state;
+      tourStorage.saveState(config.tourId, state);
+    }
   }, [state, config.tourId]);
 
   // Track step views to Convex
   useEffect(() => {
     if (state.isActive && currentStep && convexTourId) {
-      trackEvent("step_view", convexTourId, currentStep.id);
+      // Only track if it's a different step
+      if (lastTrackedStepRef.current !== currentStep.id) {
+        lastTrackedStepRef.current = currentStep.id;
+        trackEvent("step_view", convexTourId, currentStep.id);
+      }
     }
-  }, [state.currentStepIndex, state.isActive, currentStep, convexTourId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.currentStepIndex, state.isActive, convexTourId]);
 
   const nextStep = useCallback(() => {
     if (!isLastStep) {

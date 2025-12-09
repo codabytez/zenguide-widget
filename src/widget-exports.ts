@@ -6,7 +6,7 @@ export { default as ProgressIndicator } from "./components/widget/progress-indic
 export { default as NavigationControls } from "./components/widget/navigation-control";
 export { default as StepContent } from "./components/widget/step-content";
 export { default as TourCompletedOverlay } from "./components/widget/tour-completed-overlay";
-
+export { default as TourRestartButton } from "./components/widget/tour-restart-button";
 export {
   tourStorage,
   analyticsTracker,
