@@ -30,6 +30,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 
   // Fetch tour data from Convex if tourId is provided
   useEffect(() => {
+    console.log("Convex Tour ID:", convexTourId);
     if (!convexTourId) {
       setIsLoadingTour(false);
       return;
@@ -95,6 +96,8 @@ export const TourProvider: React.FC<TourProviderProps> = ({
           format: "json",
         }),
       });
+
+      console.log(`Tracked event: ${eventType} for tour: ${tourId}`);
     } catch (error) {
       console.error("Error tracking event:", error);
     }

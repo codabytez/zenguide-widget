@@ -36,7 +36,8 @@ interface AnalyticsEvent {
     | "step_completed"
     | "step_skipped"
     | "tour_completed"
-    | "tour_skipped";
+    | "tour_skipped"
+    | "tour_stopped";
   stepId?: string;
   stepIndex?: number;
   timestamp: number;
