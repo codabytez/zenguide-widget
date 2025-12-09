@@ -1,68 +1,296 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap");
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+@theme {
+  /* Typography */
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  /* Colors - Light Mode */
+  --color-background: oklch(97% 0.01 240);
+  --color-foreground: oklch(20% 0.02 240);
+
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(20% 0.02 240);
+
+  --color-popover: oklch(100% 0 0);
+  --color-popover-foreground: oklch(20% 0.02 240);
+
+  --color-primary: oklch(55% 0.15 180);
+  --color-primary-foreground: oklch(100% 0 0);
+
+  --color-secondary: oklch(92% 0.01 240);
+  --color-secondary-foreground: oklch(30% 0.02 240);
+
+  --color-muted: oklch(94% 0.01 240);
+  --color-muted-foreground: oklch(55% 0.01 240);
+
+  --color-accent: oklch(60% 0.12 180);
+  --color-accent-foreground: oklch(100% 0 0);
+
+  --color-destructive: oklch(62% 0.22 25);
+  --color-destructive-foreground: oklch(100% 0 0);
+
+  --color-border: oklch(88% 0.01 240);
+  --color-input: oklch(88% 0.01 240);
+  --color-ring: oklch(55% 0.15 180);
+
+  /* Widget-specific colors */
+  --color-widget-bg: oklch(22% 0.02 240);
+  --color-widget-surface: oklch(28% 0.02 240);
+  --color-widget-surface-hover: oklch(34% 0.02 240);
+  --color-widget-border: oklch(35% 0.01 240);
+  --color-widget-text: oklch(95% 0.01 240);
+  --color-widget-text-muted: oklch(70% 0.01 240);
+  --color-widget-accent: oklch(62% 0.15 180);
+  --color-widget-accent-glow: oklch(70% 0.17 180);
+  --color-widget-success: oklch(58% 0.14 160);
+  --color-widget-avatar-bg: oklch(18% 0.02 240);
+
+  /* Sidebar colors */
+  --color-sidebar-background: oklch(98% 0 0);
+  --color-sidebar-foreground: oklch(40% 0.01 240);
+  --color-sidebar-primary: oklch(20% 0.01 240);
+  --color-sidebar-primary-foreground: oklch(98% 0 0);
+  --color-sidebar-accent: oklch(96% 0.01 240);
+  --color-sidebar-accent-foreground: oklch(20% 0.01 240);
+  --color-sidebar-border: oklch(91% 0.01 220);
+  --color-sidebar-ring: oklch(65% 0.2 220);
+
+  /* Border radius */
+  --radius-sm: 0.5rem;
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* Shadows */
+  --shadow-widget: 0 25px 50px -12px oklch(15% 0.02 240 / 0.5);
+  --shadow-glow: 0 0 60px oklch(70% 0.17 180 / 0.3);
+  --shadow-button: 0 4px 14px oklch(55% 0.15 180 / 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    /* Colors - Dark Mode */
+    --color-background: oklch(18% 0.02 240);
+    --color-foreground: oklch(95% 0.01 240);
+
+    --color-card: oklch(22% 0.02 240);
+    --color-card-foreground: oklch(95% 0.01 240);
+
+    --color-popover: oklch(22% 0.02 240);
+    --color-popover-foreground: oklch(95% 0.01 240);
+
+    --color-primary: oklch(62% 0.15 180);
+    --color-primary-foreground: oklch(20% 0.02 240);
+
+    --color-secondary: oklch(28% 0.02 240);
+    --color-secondary-foreground: oklch(92% 0.01 240);
+
+    --color-muted: oklch(25% 0.02 240);
+    --color-muted-foreground: oklch(62% 0.01 240);
+
+    --color-accent: oklch(60% 0.12 180);
+    --color-accent-foreground: oklch(100% 0 0);
+
+    --color-destructive: oklch(58% 0.18 25);
+    --color-destructive-foreground: oklch(100% 0 0);
+
+    --color-border: oklch(30% 0.01 240);
+    --color-input: oklch(30% 0.01 240);
+    --color-ring: oklch(62% 0.15 180);
+
+    /* Sidebar colors - Dark */
+    --color-sidebar-background: oklch(20% 0.01 240);
+    --color-sidebar-foreground: oklch(96% 0.01 240);
+    --color-sidebar-primary: oklch(58% 0.18 224);
+    --color-sidebar-primary-foreground: oklch(100% 0 0);
+    --color-sidebar-accent: oklch(26% 0.01 240);
+    --color-sidebar-accent-foreground: oklch(96% 0.01 240);
+    --color-sidebar-border: oklch(26% 0.01 240);
+    --color-sidebar-ring: oklch(65% 0.2 220);
+  }
+}
+
+/* Base styles */
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+/* Widget Components */
+.widget-container {
+  background: linear-gradient(
+    180deg,
+    var(--color-widget-surface),
+    var(--color-widget-bg)
+  );
+  border: 1px solid var(--color-widget-border);
+  box-shadow: var(--shadow-widget), var(--shadow-glow);
+}
+
+.widget-glow {
+  position: relative;
+}
+
+.widget-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    135deg,
+    oklch(from var(--color-widget-accent) l c h / 0.3),
+    transparent 50%
+  );
+  border-radius: inherit;
+  z-index: -1;
+  filter: blur(20px);
+}
+
+.progress-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  transition: all 300ms;
+}
+
+.progress-dot-active {
+  background-color: var(--color-widget-accent);
+  scale: 1.25;
+  box-shadow: 0 0 12px var(--color-widget-accent-glow);
+}
+
+.progress-dot-completed {
+  background-color: var(--color-widget-success);
+}
+
+.progress-dot-inactive {
+  background-color: var(--color-widget-border);
+}
+
+.btn-widget-primary {
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  transition: all 200ms;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    oklch(65% 0.14 185)
+  );
+  color: var(--color-widget-text);
+  box-shadow: var(--shadow-button);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.btn-widget-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px oklch(55% 0.15 180 / 0.5);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+.btn-widget-secondary {
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all 200ms;
+  background: var(--color-widget-surface-hover);
+  color: var(--color-widget-text-muted);
+  border: 1px solid var(--color-widget-border);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.btn-widget-secondary:hover {
+  background: var(--color-widget-surface-hover);
+  color: var(--color-widget-text);
+  border-color: oklch(from var(--color-widget-accent) l c h / 0.5);
+}
+
+.btn-widget-ghost {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 200ms;
+  color: var(--color-widget-text-muted);
+}
+
+.btn-widget-ghost:hover {
+  color: var(--color-widget-text);
+  background: oklch(from var(--color-widget-surface-hover) l c h / 0.5);
+}
+
+/* Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
   }
-  a:hover {
-    color: #747bff;
+  50% {
+    transform: translateY(-10px);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px oklch(70% 0.17 180 / 0.3);
   }
+  50% {
+    box-shadow: 0 0 40px oklch(70% 0.17 180 / 0.5);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Utility classes */
+.text-balance {
+  text-wrap: balance;
 }
