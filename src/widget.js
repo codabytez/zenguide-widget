@@ -65,7 +65,8 @@
 
     // Load React bundle (you'll need to build and host this)
     const script = document.createElement("script");
-    script.src = "https://cdn.tourguide.app/widget-bundle.js"; // Your CDN URL
+    script.src =
+      "https://zenguide-widget-git-feat-widget-ui-codabytezs-projects.vercel.app/widget-bundle.js"; // Your CDN URL
     script.async = true;
     script.onload = function () {
       console.log("TourGuide widget loaded successfully");
