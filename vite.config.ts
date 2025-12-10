@@ -12,9 +12,7 @@ export default defineConfig({
   define: {
     "process.env": {
       NODE_ENV: JSON.stringify("production"),
-      VITE_CONVEX_URL: JSON.stringify(
-        process.env.VITE_CONVEX_URL || "https://little-pelican-550.convex.cloud"
-      ),
+      VITE_CONVEX_URL: JSON.stringify(process.env.VITE_CONVEX_URL),
     },
   },
   build: {
