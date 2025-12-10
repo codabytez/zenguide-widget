@@ -39,10 +39,10 @@ You can also experience the full tour creation workflow on the [ZenGuide Platfor
 
 ## Related Projects
 
-| Project               | Description                                                      | Links                                                                                                                              |
-| --------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **ZenGuide Platform** | The main web application for creating and managing product tours | [Website](https://zen-guide-pi.vercel.app/) • [Repository](https://github.com/codabytez/ZenGuide)                                  |
-| **ZenGuide Widget**   | Embeddable widget for displaying tours (this repo)               | [Widget CDN](https://timely-swan-1a2b58.netlify.app/widget-bundle.js) • [Repository](https://github.com/codabytez/zenguide-widget) |
+| Project               | Description                                                      | Links                                                                                                                          |
+| --------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **ZenGuide Platform** | The main web application for creating and managing product tours | [Website](https://zen-guide-pi.vercel.app/) • [Repository](https://github.com/codabytez/ZenGuide)                              |
+| **ZenGuide Widget**   | Embeddable widget for displaying tours (this repo)               | [Widget CDN](https://zenguide-widget.vercel.app/widget-bundle.js) • [Repository](https://github.com/codabytez/zenguide-widget) |
 
 ### How They Work Together
 
@@ -159,7 +159,7 @@ Add the following script tag to your HTML page:
 
 ```html
 <script
-  src="https://timely-swan-1a2b58.netlify.app/widget-bundle.js"
+  src="https://zenguide-widget.vercel.app/widget-bundle.js"
   data-tour-id="your-tour-id"
   data-auto-start="true"
 ></script>
@@ -180,7 +180,7 @@ Add the following script tag to your HTML page:
 For more control, initialize the widget programmatically:
 
 ```html
-<script src="https://timely-swan-1a2b58.netlify.app/widget-bundle.js"></script>
+<script src="https://zenguide-widget.vercel.app/widget-bundle.js"></script>
 <script>
   // Wait for the widget to load
   document.addEventListener("DOMContentLoaded", function () {
@@ -385,4 +385,4 @@ Test the widget on a real website:
 
 ---
 
-#### Built using React, TypeScript, Vite, Convex, Tailwind CSS and deployed with Netlify
+#### Built using React, TypeScript, Vite, Convex, Tailwind CSS and deployed with Vercel
