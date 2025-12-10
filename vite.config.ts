@@ -1,9 +1,22 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    cssInjectedByJsPlugin(), // Injects CSS into JS
+  ],
+  define: {
+    "process.env": {
+      NODE_ENV: JSON.stringify("production"),
+      VITE_CONVEX_URL: JSON.stringify(
+        process.env.VITE_CONVEX_URL || "https://little-pelican-550.convex.cloud"
+      ),
+    },
+  },
   build: {
     lib: {
       entry: "src/widget-entry.tsx",
@@ -13,7 +26,6 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        // Embed all dependencies (no externals)
         inlineDynamicImports: true,
       },
     },
