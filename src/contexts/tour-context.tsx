@@ -6,7 +6,7 @@ import { defaultTourSteps } from "../data/default-tour";
 import { TourContext } from "./context";
 
 // Convex client setup
-const CONVEX_URL = "https://little-pelican-550.convex.cloud";
+const CONVEX_URL = import.meta.env.VITE_CONVEX_URL;
 
 interface TourProviderProps {
   children: React.ReactNode;
