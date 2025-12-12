@@ -1,4 +1,4 @@
-// TourProvider.tsx - Fixed with better event tracking
+// TourProvider.tsx - Fixed to avoid duplicate event tracking
 
 import React, { useState, useCallback, useEffect } from "react";
 import { tourStorage, createInitialState } from "../lib/tour-utils";
@@ -189,7 +189,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   }, [state.currentStepIndex, state.isActive, currentStep, convexTourId]);
 
   const nextStep = useCallback(() => {
-    trackEvent("step_view", convexTourId || "", currentStep?.id);
+    // REMOVED duplicate trackEvent call here - it's already tracked in the useEffect
     if (!isLastStep) {
       setState((prev) => {
         const newCompletedSteps = [...prev.completedSteps];
@@ -199,7 +199,6 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 
         const newIndex = prev.currentStepIndex + 1;
         config.onStepChange?.(config.steps[newIndex].id, newIndex);
-
 
         return {
           ...prev,
@@ -223,7 +222,6 @@ export const TourProvider: React.FC<TourProviderProps> = ({
       }));
 
       config.onComplete?.();
-      return;
     }
   }, [isLastStep, currentStep, config, convexTourId]);
 
